@@ -2,8 +2,8 @@
 #include "stdlib.h"
 #include "conio.h"
 #include <windows.h>
-/* 学生定义 */
 typedef float datatype;
+/* 学生定义 */
 typedef struct Student
 {
     char Stu_Number[20];
@@ -13,7 +13,7 @@ typedef struct Student
 } Link_List;
 
 int Student_Total = 0;
-
+/* 学生成绩定义 */
 struct Student_Sort
 {
     int pass;
@@ -99,43 +99,43 @@ Link_List *SelectSort_Dirs(Link_List *Head)
     Link_List *pminBefore;
     Link_List *pmin;
     Link_List *p;
-    Link_List *head;//定义带头节点后的第一个节点
+    Link_List *head; //定义带头节点后的第一个节点
     pfirst = NULL;
-    head=Head->next;
+    head = Head->next;
     while (head != NULL)
     {
-        for (p = head, pmin = head; p->next != NULL; p = p->next)/* 循环至将全部节点排序到pfirst-ptail的新链表中（头节点为pfirst 尾节点为ptail的链表） */
+        for (p = head, pmin = head; p->next != NULL; p = p->next) /* 循环至将全部节点排序到pfirst-ptail的新链表中（头节点为pfirst 尾节点为ptail的链表） */
         {
-            if (strcmp(p->next->Stu_Name, pmin->Stu_Name) < 0)/* 找到最小的节点，标记最小的节点，和最小节点的前一个节点 */
+            if (strcmp(p->next->Stu_Name, pmin->Stu_Name) < 0) /* 找到最小的节点，标记最小的节点，和最小节点的前一个节点 */
             {
                 pminBefore = p;
                 pmin = p->next;
             }
         }
-        if (pfirst == NULL)                                 /* 把最小的节点放入新链表（头节点为pfirst 尾节点为ptail的链表） */
+        if (pfirst == NULL) /* 把最小的节点放入新链表（头节点为pfirst 尾节点为ptail的链表） */
         {
             pfirst = pmin;
             ptail = pmin;
         }
-        else                                                /* 将后续循环中的最小节点依次放入新链表 */
+        else /* 将后续循环中的最小节点依次放入新链表 */
         {
             ptail->next = pmin;
             ptail = pmin;
         }
-        if (pmin == head)                                   /* 如果最小值为头节点时，链表的头节点移到下一位 */
+        if (pmin == head) /* 如果最小值为头节点时，链表的头节点移到下一位 */
         {
             head = head->next;
         }
-        else                                                /* 如果不是头节点，直接将原链表的最小节点跳过，形成去掉最小值的原链表 */
+        else /* 如果不是头节点，直接将原链表的最小节点跳过，形成去掉最小值的原链表 */
         {
             pminBefore->next = pmin->next;
         }
     }
-    if (pfirst != NULL)                                     /* 判断有没有新链表 */
+    if (pfirst != NULL) /* 判断有没有新链表 */
     {
-        ptail->next = NULL;                                 /* 新链表的尾节点下一位置空 */
+        ptail->next = NULL; /* 新链表的尾节点下一位置空 */
     }
-    Head->next = pfirst;                                    /* 带头节点指向新链表 */
+    Head->next = pfirst; /* 带头节点指向新链表 */
     return Head;
 }
 
@@ -151,12 +151,12 @@ Link_List *SelectSort_Score(Link_List *Head)
     Link_List *pmaxBefore;
     Link_List *pmax;
     Link_List *p;
-    Link_List *head;//定义带头节点后的第一个节点
+    Link_List *head; //定义带头节点后的第一个节点
     pfirst = NULL;
-    head=Head->next;
-    while (head != NULL)/* 循环至将全部节点排序到pfirst-ptail的新链表中（头节点为pfirst 尾节点为ptail的链表） */
+    head = Head->next;
+    while (head != NULL) /* 循环至将全部节点排序到pfirst-ptail的新链表中（头节点为pfirst 尾节点为ptail的链表） */
     {
-        for (p = head, pmax = head; p->next != NULL; p = p->next)/* 找到最大的节点，标记最大的节点和最大节点的前一个节点 */
+        for (p = head, pmax = head; p->next != NULL; p = p->next) /* 找到最大的节点，标记最大的节点和最大节点的前一个节点 */
         {
             if (p->next->Score > pmax->Score)
             {
@@ -169,25 +169,25 @@ Link_List *SelectSort_Score(Link_List *Head)
             pfirst = pmax;
             ptail = pmax;
         }
-        else                /* 将后续循环中的最大节点依次放入新链表 */
+        else /* 将后续循环中的最大节点依次放入新链表 */
         {
             ptail->next = pmax;
             ptail = pmax;
         }
-        if (pmax == head)   /* 如果最大值为头节点时，链表的头节点移到下一位 */
+        if (pmax == head) /* 如果最大值为头节点时，链表的头节点移到下一位 */
         {
             head = head->next;
         }
-        else                /* 如果不是头节点，直接将原链表的最大节点跳过，形成去掉最大值的原链表 */
+        else /* 如果不是头节点，直接将原链表的最大节点跳过，形成去掉最大值的原链表 */
         {
             pmaxBefore->next = pmax->next;
         }
     }
-    if (pfirst != NULL)     /* 判断有没有新链表 */
+    if (pfirst != NULL) /* 判断有没有新链表 */
     {
         ptail->next = NULL; /* 新链表的尾节点下一位置空 */
     }
-    Head->next = pfirst;    /* 带头节点指向新链表 */
+    Head->next = pfirst; /* 带头节点指向新链表 */
     return Head;
 }
 /**
