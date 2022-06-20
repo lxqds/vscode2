@@ -2,7 +2,8 @@
 #include <windows.h>
 int main()
 {
-    printf("Hello World\n");
+    printf("ÄãºÃ\n");
     system("pause");
     return 0;
 }
+
