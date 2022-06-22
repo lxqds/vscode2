@@ -4,7 +4,7 @@
 #include "Key.h"
 #include "FFTADC.h"
 
-extern volatile uint16_t ADC1_ConvertedValue;			//ADC²ÉÑùµÄÊı¾İ
+extern volatile uint16_t ADC1_ConvertedValue;			//ADCé‡‡æ ·çš„æ•°æ®
 
 unsigned char CD4066Control(unsigned char s);
 unsigned char CD4051Control(unsigned char i);
@@ -86,9 +86,9 @@ int main()
 	}
 }
 /**
-  * @brief  CD4051¿ØÖÆ
-  * @param  1£¬ÒôÁ¿++£¬0£¬ÒôÁ¿--
-  * @retval µ±Ç°ÒôÁ¿µÈ¼¶
+  * @brief  CD4051æ§åˆ¶
+  * @param  1ï¼ŒéŸ³é‡++ï¼Œ0ï¼ŒéŸ³é‡--
+  * @retval å½“å‰éŸ³é‡ç­‰çº§
   */
 unsigned char CD4051Control(unsigned char i)
 {
@@ -114,9 +114,9 @@ unsigned char CD4051Control(unsigned char i)
 	return t;
 }
 /**
-  * @brief  CD4066¿ØÖÆ
-  * @param  1£¬ÒôÔ´++£¬0£¬ÒôÔ´--
-  * @retval µ±Ç°ÒôÔ´
+  * @brief  CD4066æ§åˆ¶
+  * @param  1ï¼ŒéŸ³æº++ï¼Œ0ï¼ŒéŸ³æº--
+  * @retval å½“å‰éŸ³æº
   */
 unsigned char CD4066Control(unsigned char s)
 {
