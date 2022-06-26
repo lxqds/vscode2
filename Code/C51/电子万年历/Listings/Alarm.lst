@@ -1,0 +1,209 @@
+C51 COMPILER V9.60.0.0   ALARM                                                             06/26/2022 13:43:19 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ALARM
+OBJECT MODULE PLACED IN .\Objects\Alarm.obj
+COMPILER INVOKED BY: D:\KeilMDKArm\C51\BIN\C51.EXE Hardware\Alarm.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\Alarm.lst) TABS(2) OBJECT(.\Objects\Alarm.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+*** WARNING C318 IN LINE 1 OF Hardware\Alarm.c: can't open file 'STC15F2K60S2.H'
+   2          #include "Alarm.h"
+*** WARNING C318 IN LINE 31 OF Hardware\oled.h: can't open file 'STC15F2K60S2.H'
+*** ERROR C202 IN LINE 42 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 43 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 44 OF Hardware\oled.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 45 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 46 OF Hardware\oled.h: 'P1': undefined identifier
+   3          #include "oled.h"
+*** WARNING C318 IN LINE 31 OF Hardware\oled.h: can't open file 'STC15F2K60S2.H'
+   4          #include "MATRIXKEY.h"
+   5          
+   6          sbit BEEP = P0^4;
+*** ERROR C202 IN LINE 6 OF Hardware\Alarm.c: 'P0': undefined identifier
+   7          
+   8          unsigned char Alarm_Change_Flag = 1;
+   9          unsigned char Alarm_Cursor_Position;
+  10          unsigned char Alarm_State;
+  11          /**
+  12            * @brief  闹钟的初始化
+  13            * @param  无
+  14            * @retval 无
+  15            */
+  16          void Alarm_Init()
+  17          {
+  18   1        if(Alarm_Change_Flag)
+  19   1        {
+  20   2          Alarm_Change_Flag = 0;//首次仅读取一次时间
+  21   2          Alarm = Time;
+  22   2        }
+  23   1          OLED_ShowNum(8,0,20,2,16);
+  24   1          OLED_ShowCHinese(40,0,7);//年
+  25   1          OLED_ShowNum(56,0,Alarm.Month,2,16);
+  26   1          OLED_ShowCHinese(72,0,8);//月
+  27   1          OLED_ShowNum(88,0,Alarm.Day,2,16);
+  28   1          OLED_ShowCHinese(104,0,9);//日
+  29   1          OLED_ShowNum(16,2,Alarm.Hour,2,16);
+  30   1          OLED_ShowCHinese(32,2,10);//时
+  31   1          OLED_ShowNum(48,2,Alarm.Minute,2,16);
+  32   1          OLED_ShowCHinese(64,2,11);//分
+  33   1          OLED_ShowNum(80,2,Alarm.Second,2,16);
+  34   1          OLED_ShowCHinese(96,2,12);//秒
+  35   1      
+  36   1      //    OLED_ShowCHinese(40,4,13);//星
+  37   1      //    OLED_ShowCHinese(56,4,14);//期
+  38   1      //    OLED_ShowCHinese(72,4,Alarm.Week-1);//天
+  39   1        
+  40   1          Alarm_Cursor_Position = 1;
+  41   1        
+  42   1      }
+  43          /**
+  44            * @brief  闹钟去初始化
+  45            * @param  无
+C51 COMPILER V9.60.0.0   ALARM                                                             06/26/2022 13:43:19 PAGE 2   
+
+  46            * @retval 无
+  47            */
+  48          void Alarm_Deinit()
+  49          {
+  50   1          OLED_Clear();
+  51   1      }
+  52          /**
+  53            * @brief  按键值输入修改闹钟的时间
+  54            * @param  按键值
+  55            * @retval 无
+  56            */
+  57          void Alarm_Key(unsigned char Key)
+  58          {
+  59   1        switch(Key)
+  60   1        {
+  61   2          case KEY_0:
+  62   2          case KEY_1:
+  63   2          case KEY_2:
+  64   2          case KEY_3:
+  65   2          case KEY_4:
+  66   2          case KEY_5:
+  67   2          case KEY_6:
+  68   2          case KEY_7:
+  69   2          case KEY_8: 
+  70   2          case KEY_9:
+  71   2            {
+  72   3              switch(Alarm_Cursor_Position)
+  73   3              {
+  74   4                case 1:Alarm.Year = (Key*10+Alarm.Year % 10);break;
+  75   4                case 2:Alarm.Year = (Alarm.Year / 10)*10 + Key;break;
+  76   4                case 3:Alarm.Month = (Key*10+Alarm.Month % 10);break;
+  77   4                case 4:Alarm.Month = (Alarm.Month / 10)*10 + Key;break;
+  78   4                case 5:Alarm.Day = (Key*10+Alarm.Day % 10);break;
+  79   4                case 6:Alarm.Day = (Alarm.Day / 10)*10 + Key;break;
+  80   4                case 7:Alarm.Hour = (Key*10+Alarm.Hour % 10);break;
+  81   4                case 8:Alarm.Hour = (Alarm.Hour / 10)*10 + Key;break;
+  82   4                case 9:Alarm.Minute = (Key*10+Alarm.Minute % 10);break;
+  83   4                case 10:Alarm.Minute = (Alarm.Minute / 10)*10 + Key;break;
+  84   4                case 11:Alarm.Second = (Key*10+Alarm.Second % 10);break;
+  85   4                case 12:Alarm.Second = (Alarm.Second / 10)*10 + Key;break;
+  86   4                  
+  87   4              }
+  88   3            }break;
+  89   2          case KEY_ENTER:
+  90   2          {
+  91   3            Alarm_Cursor_Position ++;
+  92   3            if(Alarm_Cursor_Position == 13)
+  93   3            {
+  94   4              Alarm_Cursor_Position = 1;
+  95   4              Alarm_State = 1;
+  96   4            }
+  97   3              
+  98   3            
+  99   3          }break;
+ 100   2                  
+ 101   2          case KEY_BACK:
+ 102   2          {
+ 103   3                  Alarm_Deinit();
+ 104   3          }break;   
+ 105   2          default: break; 
+ 106   2          
+ 107   2        }
+C51 COMPILER V9.60.0.0   ALARM                                                             06/26/2022 13:43:19 PAGE 3   
+
+ 108   1      }
+ 109          /**
+ 110            * @brief  闹钟时间显示
+ 111            * @param  无
+ 112            * @retval 无
+ 113            */
+ 114          void Alarm_Display()
+ 115          {
+ 116   1        OLED_ShowNum(24,0,Alarm.Year,2,16);
+ 117   1          OLED_ShowNum(56,0,Alarm.Month,2,16);
+ 118   1          OLED_ShowNum(88,0,Alarm.Day,2,16);
+ 119   1          OLED_ShowNum(16,2,Alarm.Hour,2,16);
+ 120   1          OLED_ShowNum(48,2,Alarm.Minute,2,16);
+ 121   1          OLED_ShowNum(80,2,Alarm.Second,2,16);
+ 122   1        OLED_ShowString(72,6,"Alarm");
+ 123   1        switch(Alarm_Cursor_Position)
+ 124   1        {
+ 125   2          case 1:OLED_ShowString(24,0,"_");break;
+ 126   2          case 2:OLED_ShowString(32,0,"_");break;
+ 127   2          case 3:OLED_ShowString(56,0,"_");break;
+ 128   2          case 4:OLED_ShowString(64,0,"_");break;
+ 129   2          case 5:OLED_ShowString(88,0,"_");break;
+ 130   2          case 6:OLED_ShowString(96,0,"_");break;
+ 131   2          case 7:OLED_ShowString(16,2,"_");break;
+ 132   2          case 8:OLED_ShowString(24,2,"_");break;
+ 133   2          case 9:OLED_ShowString(48,2,"_");break;
+ 134   2          case 10:OLED_ShowString(56,2,"_");break;
+ 135   2          case 11:OLED_ShowString(80,2,"_");break;
+ 136   2          case 12:OLED_ShowString(88,2,"_");break;  
+ 137   2        }
+ 138   1      }
+ 139          /**
+ 140            * @brief  闹钟响
+ 141            * @param  无
+ 142            * @retval 无
+ 143            */
+ 144          void Alarm_Ring()
+ 145          {
+ 146   1        if(Alarm_State)
+ 147   1        {
+ 148   2          if(Change_500ms)
+ 149   2          {
+ 150   3            BEEP = ~BEEP;
+*** ERROR C202 IN LINE 150 OF Hardware\Alarm.c: 'BEEP': undefined identifier
+ 151   3          }
+ 152   2        }
+ 153   1        
+ 154   1      }
+ 155          /**
+ 156            * @brief  闹钟停
+ 157            * @param  无
+ 158            * @retval 无
+ 159            */
+ 160          void Alarm_Off()
+ 161          {
+ 162   1        BEEP = 0;
+*** ERROR C202 IN LINE 162 OF Hardware\Alarm.c: 'BEEP': undefined identifier
+ 163   1        Alarm_State = 0;  
+ 164   1      } 
+ 165          /**
+ 166            * @brief  检查闹钟
+ 167            * @param  无
+C51 COMPILER V9.60.0.0   ALARM                                                             06/26/2022 13:43:19 PAGE 4   
+
+ 168            * @retval 无
+ 169            */
+ 170          void Alarm_Check()
+ 171          {
+ 172   1        if(Alarm.Hour == Time.Hour&&Alarm.Minute == Time.Minute)
+ 173   1        {
+ 174   2          Alarm_Ring();
+ 175   2        }
+ 176   1        else 
+ 177   1        {
+ 178   2          Alarm_Off();
+ 179   2        }
+ 180   1      }
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  8 ERROR(S)

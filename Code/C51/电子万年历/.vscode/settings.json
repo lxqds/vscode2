@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.H": "a51",
+        "STC15F.H": "cpp",
+        "reg52.h": "c",
+        "main.h": "c",
+        "delay.h": "c",
+        "at24c02.h": "c",
+        "spioled.h": "c",
+        "intrins.h": "c",
+        "matrixkey.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}

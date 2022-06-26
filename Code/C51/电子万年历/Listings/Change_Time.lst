@@ -1,0 +1,142 @@
+C51 COMPILER V9.60.0.0   CHANGE_TIME                                                       06/26/2022 13:43:19 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CHANGE_TIME
+OBJECT MODULE PLACED IN .\Objects\Change_Time.obj
+COMPILER INVOKED BY: D:\KeilMDKArm\C51\BIN\C51.EXE Hardware\Change_Time.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PR
+                    -INT(.\Listings\Change_Time.lst) TABS(2) OBJECT(.\Objects\Change_Time.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+*** WARNING C318 IN LINE 1 OF Hardware\Change_Time.c: can't open file 'STC15F2K60S2.H'
+   2          #include "DS1302.h"
+   3          #include "oled.h"
+*** WARNING C318 IN LINE 31 OF Hardware\oled.h: can't open file 'STC15F2K60S2.H'
+*** ERROR C202 IN LINE 42 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 43 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 44 OF Hardware\oled.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 45 OF Hardware\oled.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 46 OF Hardware\oled.h: 'P1': undefined identifier
+   4          #include "Clock.h"
+   5          #include "MATRIXKEY.h"
+   6          //#include "Uart.h"
+   7          unsigned char Cursor_Position;
+   8          void Change_Time_Init()//初始化
+   9          {
+  10   1          OLED_ShowNum(8,0,20,2,16);
+  11   1          OLED_ShowNum(24,0,Time.Year,2,16);
+  12   1          OLED_ShowCHinese(40,0,7);//年
+  13   1          OLED_ShowNum(56,0,Time.Month,2,16);
+  14   1          OLED_ShowCHinese(72,0,8);//月
+  15   1          OLED_ShowNum(88,0,Time.Day,2,16);
+  16   1          OLED_ShowCHinese(104,0,9);//日
+  17   1          OLED_ShowNum(16,2,Time.Hour,2,16);
+  18   1          OLED_ShowCHinese(32,2,10);//时
+  19   1          OLED_ShowNum(48,2,Time.Minute,2,16);
+  20   1          OLED_ShowCHinese(64,2,11);//分
+  21   1          OLED_ShowNum(80,2,Time.Second,2,16);
+  22   1          OLED_ShowCHinese(96,2,12);//秒
+  23   1      
+  24   1          OLED_ShowCHinese(40,4,13);//星
+  25   1          OLED_ShowCHinese(56,4,14);//期
+  26   1          OLED_ShowCHinese(72,4,Time.Week);//天
+  27   1        
+  28   1          Cursor_Position = 1;
+  29   1      }
+  30          void Change_Time_Deinit()//去初始化
+  31          {
+  32   1        OLED_Clear();
+  33   1        Clock_Time_To_DS1302();
+  34   1      }
+  35          /**
+  36            * @brief  //根据按键的输入修改时间
+  37            * @param  按键值
+  38            * @retval 无
+  39            */
+  40          void Change_Time_Key(Key_T Key)
+  41          {
+  42   1        
+  43   1        switch(Key)
+  44   1        {
+  45   2          case KEY_0:
+  46   2          case KEY_1:
+  47   2          case KEY_2:
+C51 COMPILER V9.60.0.0   CHANGE_TIME                                                       06/26/2022 13:43:19 PAGE 2   
+
+  48   2          case KEY_3:
+  49   2          case KEY_4:
+  50   2          case KEY_5:
+  51   2          case KEY_6:
+  52   2          case KEY_7:
+  53   2          case KEY_8: 
+  54   2          case KEY_9:
+  55   2            {
+  56   3              switch(Cursor_Position)
+  57   3              {
+  58   4                case 1:Time.Year = (Key*10+Time.Year % 10);break;
+  59   4                case 2:Time.Year = (Time.Year / 10)*10 + Key;break;
+  60   4                case 3:Time.Month = (Key*10+Time.Month % 10);break;
+  61   4                case 4:Time.Month = (Time.Month / 10)*10 + Key;break;
+  62   4                case 5:Time.Day = (Key*10+Time.Day % 10);break;
+  63   4                case 6:Time.Day = (Time.Day / 10)*10 + Key;break;
+  64   4                case 7:Time.Hour = (Key*10+Time.Hour % 10);break;
+  65   4                case 8:Time.Hour = (Time.Hour / 10)*10 + Key;break;
+  66   4                case 9:Time.Minute = (Key*10+Time.Minute % 10);break;
+  67   4                case 10:Time.Minute = (Time.Minute / 10)*10 + Key;break;
+  68   4                case 11:Time.Second = (Key*10+Time.Second % 10);break;
+  69   4                case 12:Time.Second = (Time.Second / 10)*10 + Key;break;
+  70   4                  
+  71   4              }
+  72   3            }break;
+  73   2          case KEY_ENTER:
+  74   2          {
+  75   3            Cursor_Position ++;
+  76   3            if(Cursor_Position == 13)
+  77   3              Cursor_Position = 1;
+  78   3            
+  79   3          }break;
+  80   2          case KEY_BACK:
+  81   2          {
+  82   3                  Change_Time_Deinit();
+  83   3          }break;     
+  84   2                  
+  85   2          default: break; 
+  86   2          
+  87   2        }
+  88   1      }
+  89          /**
+  90            * @brief  将修改的时间显示出来
+  91            * @param  无
+  92            * @retval 无
+  93            */
+  94          void Change_Time_Display()
+  95          {
+  96   1          OLED_ShowNum(24,0,Time.Year,2,16);
+  97   1          OLED_ShowNum(56,0,Time.Month,2,16);
+  98   1          OLED_ShowNum(88,0,Time.Day,2,16);
+  99   1          OLED_ShowNum(16,2,Time.Hour,2,16);
+ 100   1          OLED_ShowNum(48,2,Time.Minute,2,16);
+ 101   1          OLED_ShowNum(80,2,Time.Second,2,16);
+ 102   1        OLED_ShowString(72,6,"SetTime");
+ 103   1        switch(Cursor_Position)
+ 104   1        {
+ 105   2          case 1:OLED_ShowString(24,0,"_");break;
+ 106   2          case 2:OLED_ShowString(32,0,"_");break;
+ 107   2          case 3:OLED_ShowString(56,0,"_");break;
+ 108   2          case 4:OLED_ShowString(64,0,"_");break;
+ 109   2          case 5:OLED_ShowString(88,0,"_");break;
+C51 COMPILER V9.60.0.0   CHANGE_TIME                                                       06/26/2022 13:43:19 PAGE 3   
+
+ 110   2          case 6:OLED_ShowString(96,0,"_");break;
+ 111   2          case 7:OLED_ShowString(16,2,"_");break;
+ 112   2          case 8:OLED_ShowString(24,2,"_");break;
+ 113   2          case 9:OLED_ShowString(48,2,"_");break;
+ 114   2          case 10:OLED_ShowString(56,2,"_");break;
+ 115   2          case 11:OLED_ShowString(80,2,"_");break;
+ 116   2          case 12:OLED_ShowString(88,2,"_");break;  
+ 117   2        }
+ 118   1         
+ 119   1      }
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  5 ERROR(S)

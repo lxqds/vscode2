@@ -1,0 +1,175 @@
+C51 COMPILER V9.60.0.0   UART                                                              06/26/2022 14:20:15 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Objects\Uart.obj
+COMPILER INVOKED BY: D:\KeilMDKArm\C51\BIN\C51.EXE Hardware\Uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\Uart.lst) TABS(2) OBJECT(.\Objects\Uart.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+*** WARNING C318 IN LINE 1 OF Hardware\Uart.c: can't open file 'STC15F2K60S2.H'
+   2          #include <stdio.h>
+   3          #include "Uart.h"
+   4          #include "MATRIXKEY.h"
+   5          #include "Change_Time.h"
+   6          #include "main.h"
+*** ERROR C202 IN LINE 5 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 7 OF main.h: 'P0': undefined identifier
+*** ERROR C202 IN LINE 9 OF main.h: 'P0': undefined identifier
+*** ERROR C202 IN LINE 10 OF main.h: 'P0': undefined identifier
+*** ERROR C202 IN LINE 11 OF main.h: 'P0': undefined identifier
+*** ERROR C202 IN LINE 12 OF main.h: 'P0': undefined identifier
+*** ERROR C202 IN LINE 13 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 14 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 15 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 16 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 18 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 20 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 21 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 22 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 24 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 25 OF main.h: 'P2': undefined identifier
+*** ERROR C202 IN LINE 26 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 28 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 29 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 30 OF main.h: 'P4': undefined identifier
+*** ERROR C202 IN LINE 31 OF main.h: 'P3': undefined identifier
+*** ERROR C202 IN LINE 32 OF main.h: 'P1': undefined identifier
+*** ERROR C202 IN LINE 33 OF main.h: 'P1': undefined identifier
+   7          static unsigned char Receive_Data;
+   8          Key_T ReKey;
+   9          /**
+  10            * @brief  串口初始化，4800bps@12.000MHz
+  11            * @param  无
+  12            * @retval 无
+  13            */
+  14          void Uart_Init(void)    //9600bps@24.000MHz
+  15          {
+  16   1        SCON = 0x50;    //8位数据,可变波特率
+*** ERROR C202 IN LINE 16 OF Hardware\Uart.c: 'SCON': undefined identifier
+  17   1        AUXR |= 0x40;   //定时器时钟1T模式
+*** ERROR C202 IN LINE 17 OF Hardware\Uart.c: 'AUXR': undefined identifier
+  18   1        AUXR &= 0xFE;   //串口1选择定时器1为波特率发生器
+*** ERROR C202 IN LINE 18 OF Hardware\Uart.c: 'AUXR': undefined identifier
+  19   1        TMOD &= 0x0F;   //设置定时器模式
+*** ERROR C202 IN LINE 19 OF Hardware\Uart.c: 'TMOD': undefined identifier
+  20   1        TL1 = 0x8F;   //设置定时初始值
+*** ERROR C202 IN LINE 20 OF Hardware\Uart.c: 'TL1': undefined identifier
+  21   1        TH1 = 0xFD;   //设置定时初始值
+*** ERROR C202 IN LINE 21 OF Hardware\Uart.c: 'TH1': undefined identifier
+  22   1      //  ET1 = 0;    //禁止定时器%d中断
+  23   1        TR1 = 1;    //定时器1开始计时
+*** ERROR C202 IN LINE 23 OF Hardware\Uart.c: 'TR1': undefined identifier
+C51 COMPILER V9.60.0.0   UART                                                              06/26/2022 14:20:15 PAGE 2   
+
+  24   1        
+  25   1        EA =1;
+*** ERROR C202 IN LINE 25 OF Hardware\Uart.c: 'EA': undefined identifier
+  26   1        ES = 1;
+*** ERROR C202 IN LINE 26 OF Hardware\Uart.c: 'ES': undefined identifier
+  27   1        Change_Time_Init();
+  28   1      }
+  29          
+  30          /**
+  31            * @brief  串口发送一个字节数据
+  32            * @param  Byte 要发送的一个字节数据
+  33            * @retval 无
+  34            */
+  35          void Uart_SendByte(unsigned char Byte)
+  36          {
+  37   1        SBUF=Byte;
+*** ERROR C202 IN LINE 37 OF Hardware\Uart.c: 'SBUF': undefined identifier
+  38   1        while(TI==0);
+*** ERROR C202 IN LINE 38 OF Hardware\Uart.c: 'TI': undefined identifier
+  39   1        TI=0;
+*** ERROR C202 IN LINE 39 OF Hardware\Uart.c: 'TI': undefined identifier
+  40   1      }
+  41          /**
+  42            * @brief  发送字符串
+  43            * @param  要发送的字符串
+  44            * @retval 无
+  45            */
+  46          void Uart1_SendString(char *s)
+  47          {
+  48   1        while(*s)
+  49   1        {
+  50   2          Uart_SendByte(*s++);
+  51   2        }
+  52   1      }
+  53          char putchar(char c)//重定向，需包括stdio
+  54          {
+  55   1        Uart_SendByte((unsigned char)c);
+  56   1        return c;
+  57   1      }
+  58          /**
+  59            * @brief  串口接收中断
+  60            * @param  Byte 要发送的一个字节数据
+  61            * @retval 无
+  62            */
+  63          void UART1_Rountine(void) interrupt 4
+  64          {
+  65   1        unsigned char Receive_Flag;
+  66   1      
+  67   1        EA = 0;
+*** ERROR C202 IN LINE 67 OF Hardware\Uart.c: 'EA': undefined identifier
+  68   1        
+  69   1        if(RI == 1)
+*** ERROR C202 IN LINE 69 OF Hardware\Uart.c: 'RI': undefined identifier
+  70   1        {
+  71   2          Receive_Flag = 1;
+  72   2          RI = 0;
+*** ERROR C202 IN LINE 72 OF Hardware\Uart.c: 'RI': undefined identifier
+  73   2          Receive_Data = SBUF;
+*** ERROR C202 IN LINE 73 OF Hardware\Uart.c: 'SBUF': undefined identifier
+  74   2      //    ReKey = Keyboard_Map_Key(Receive_Data);
+  75   2      //    Change_Time_Key(ReKey);
+  76   2      //    Change_Time_Display();
+C51 COMPILER V9.60.0.0   UART                                                              06/26/2022 14:20:15 PAGE 3   
+
+  77   2      
+  78   2          SBUF = Receive_Data;//将接收到的数据放入到发送寄存器
+*** ERROR C202 IN LINE 78 OF Hardware\Uart.c: 'SBUF': undefined identifier
+  79   2          if(TI)          //等待发送数据完成
+*** ERROR C202 IN LINE 79 OF Hardware\Uart.c: 'TI': undefined identifier
+  80   2          TI = 0;             //清除发送完成标志位
+*** ERROR C202 IN LINE 80 OF Hardware\Uart.c: 'TI': undefined identifier
+  81   2          
+  82   2        }
+  83   1        EA =1;
+*** ERROR C202 IN LINE 83 OF Hardware\Uart.c: 'EA': undefined identifier
+  84   1      }
+  85          
+  86          /**
+  87            * @brief  串口控制
+  88            * @param  无
+  89            * @retval 接受到的数据
+  90            */
+  91          Key_T Uart_Control()
+  92          {
+  93   1        if(Receive_Data)
+  94   1        {
+  95   2          ReKey = Keyboard_Map_Key(Receive_Data);
+  96   2          Receive_Data = 0;
+  97   2        }
+  98   1        else
+  99   1        {
+ 100   2          Receive_Data = 0;
+ 101   2          ReKey = Keyboard_Map_Key(Receive_Data);
+ 102   2        }
+ 103   1        Change_Time_Key(ReKey);
+ 104   1        Change_Time_Display();
+ 105   1        return ReKey;
+ 106   1      }
+ 107          
+ 108          bit Uart_Return_Time()
+ 109          {
+ 110   1        if(Receive_Data)
+ 111   1        {
+ 112   2          return 1;
+ 113   2        }
+ 114   1        else return 0;
+ 115   1      }
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  43 ERROR(S)

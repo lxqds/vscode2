@@ -1,0 +1,189 @@
+C51 COMPILER V9.60.0.0   IIC                                                               06/26/2022 14:20:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IIC
+OBJECT MODULE PLACED IN .\Objects\IIC.obj
+COMPILER INVOKED BY: D:\KeilMDKArm\C51\BIN\C51.EXE Hardware\IIC.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\IIC.lst) TABS(2) OBJECT(.\Objects\IIC.obj)
+
+line level    source
+
+   1          #include <STC15F2K60S2.H>
+*** WARNING C318 IN LINE 1 OF Hardware\IIC.c: can't open file 'STC15F2K60S2.H'
+   2          #include "Delay.h"
+   3          sbit AT24C02_WP = P2^1;
+*** ERROR C202 IN LINE 3 OF Hardware\IIC.c: 'P2': undefined identifier
+   4          sbit AT24C02_SCL = P2^0;
+*** ERROR C202 IN LINE 4 OF Hardware\IIC.c: 'P2': undefined identifier
+   5          sbit AT24C02_SDA = P4^4;
+*** ERROR C202 IN LINE 5 OF Hardware\IIC.c: 'P4': undefined identifier
+   6          sbit IIC_SDA = P4^4;
+*** ERROR C202 IN LINE 6 OF Hardware\IIC.c: 'P4': undefined identifier
+   7          sbit IIC_SCL = P2^0;
+*** ERROR C202 IN LINE 7 OF Hardware\IIC.c: 'P2': undefined identifier
+   8          /**
+   9            * @brief  串口控制
+  10            * @param  无
+  11            * @retval 接受到的数据
+  12            */
+  13          void IIC_Init(void)
+  14          {
+  15   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 15 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  16   1        Delay4us();
+  17   1        IIC_SDA = 1;
+*** ERROR C202 IN LINE 17 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  18   1        Delay4us();
+  19   1      }
+  20          /**
+  21            * @brief  串口控制
+  22            * @param  无
+  23            * @retval 接受到的数据
+  24            */
+  25          void IIC_Start(void)
+  26          {
+  27   1        IIC_SDA = 1; 
+*** ERROR C202 IN LINE 27 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  28   1        Delay5us();//确保sda高电平
+  29   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 29 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  30   1        Delay5us();//确保scl高电平
+  31   1        IIC_SDA = 0; 
+*** ERROR C202 IN LINE 31 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  32   1        Delay5us();//保持4.7us
+  33   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 33 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  34   1      }
+  35          /**
+  36            * @brief  串口控制
+  37            * @param  无
+  38            * @retval 接受到的数据
+  39            */
+  40          void IIC_Stop(void)
+  41          {
+  42   1        IIC_SCL = 0;
+C51 COMPILER V9.60.0.0   IIC                                                               06/26/2022 14:20:14 PAGE 2   
+
+*** ERROR C202 IN LINE 42 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  43   1        IIC_SDA = 0;
+*** ERROR C202 IN LINE 43 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  44   1        Delay4us();
+  45   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 45 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  46   1        Delay4us();//与sda保持4us时差
+  47   1        IIC_SDA = 1;
+*** ERROR C202 IN LINE 47 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  48   1        Delay5us();//维持4.7us  
+  49   1      }
+  50          void IIC_Ack(void)
+  51          {
+  52   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 52 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  53   1        IIC_SDA = 0;
+*** ERROR C202 IN LINE 53 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  54   1        Delay2us();
+  55   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 55 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  56   1        Delay5us();
+  57   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 57 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  58   1      }
+  59          void IIC_Not_Ack(void)
+  60          {
+  61   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 61 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  62   1        IIC_SDA = 1;
+*** ERROR C202 IN LINE 62 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  63   1        Delay2us();
+  64   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 64 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  65   1        Delay5us();
+  66   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 66 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  67   1      }
+  68          unsigned char IIC_ReceiveAck()
+  69          {
+  70   1        unsigned char AckBit;
+  71   1        IIC_SDA = 1;
+*** ERROR C202 IN LINE 71 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  72   1        Delay5us();
+  73   1        IIC_SCL = 1;
+*** ERROR C202 IN LINE 73 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  74   1        Delay5us();
+  75   1        AckBit = IIC_SDA;
+*** ERROR C202 IN LINE 75 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  76   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 76 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  77   1        return AckBit;
+  78   1      }
+  79          void IIC_SendByte(unsigned char SendByte)
+  80          { 
+  81   1        unsigned char i;//  SDA_OUT
+  82   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 82 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  83   1        for (i = 0;i < 8;i++ )
+  84   1        {
+  85   2      //    IIC_SDA = SendByte&(0x80>>i);
+  86   2          if((SendByte & 0x80)>>7)
+  87   2          {
+C51 COMPILER V9.60.0.0   IIC                                                               06/26/2022 14:20:14 PAGE 3   
+
+  88   3            IIC_SDA = 1;
+*** ERROR C202 IN LINE 88 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  89   3          }
+  90   2          else
+  91   2          {
+  92   3            IIC_SDA = 0;
+*** ERROR C202 IN LINE 92 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+  93   3          }
+  94   2          SendByte<<=1;
+  95   2          Delay2us();
+  96   2          IIC_SCL = 1;
+*** ERROR C202 IN LINE 96 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  97   2          Delay2us();
+  98   2          IIC_SCL = 0;
+*** ERROR C202 IN LINE 98 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+  99   2          Delay2us();
+ 100   2        }
+ 101   1        Delay(100);
+ 102   1      }
+ 103          
+ 104          unsigned char IIC_ReadByte(unsigned char Ack)//1 Ack;0 nor Ack
+ 105          {
+ 106   1        unsigned char i,Receive = 0;//  SDA_IN
+ 107   1        for(i = 0;i < 8;i ++)
+ 108   1        {
+ 109   2          IIC_SCL = 0;
+*** ERROR C202 IN LINE 109 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+ 110   2          Delay2us();
+ 111   2          IIC_SCL = 1;
+*** ERROR C202 IN LINE 111 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+ 112   2          Receive <<=1;
+ 113   2          if(IIC_SDA == 1)
+*** ERROR C202 IN LINE 113 OF Hardware\IIC.c: 'IIC_SDA': undefined identifier
+ 114   2          {
+ 115   3            Receive++;
+ 116   3          }
+ 117   2          Delay1us();
+ 118   2        }
+ 119   1        if(!Ack)
+ 120   1          IIC_Not_Ack();
+ 121   1        else
+ 122   1          IIC_Ack();
+ 123   1        IIC_SCL = 0;
+*** ERROR C202 IN LINE 123 OF Hardware\IIC.c: 'IIC_SCL': undefined identifier
+ 124   1          Delay2us();
+ 125   1        return Receive;
+ 126   1      }
+ 127          
+ 128          
+ 129          
+ 130          
+ 131          
+ 132          
+ 133          
+ 134          
+ 135          
+ 136          
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  36 ERROR(S)

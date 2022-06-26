@@ -1,0 +1,238 @@
+C51 COMPILER V9.60.0.0   SPIOLED                                                           06/26/2022 15:37:16 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SPIOLED
+OBJECT MODULE PLACED IN .\Objects\SPIOled.obj
+COMPILER INVOKED BY: D:\KeilMDKArm\C51\BIN\C51.EXE Hardware\SPIOled.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\Listin
+                    -gs\SPIOled.lst) TABS(2) OBJECT(.\Objects\SPIOled.obj)
+
+line level    source
+
+   1          #include ".\Library\STC15F.H"
+   2          #include ".\Hardware\SPI.h"
+   3          #include ".\Hardware\Delay.h"
+   4          #include <stdio.h>
+   5          #include <stdarg.h>
+   6          #include ".\Hardware\SPIOled.h"
+   7          #include ".\Hardware\OLEDWord.h"
+   8          sbit OLED_DC = P4^7;
+   9          sbit OLED_CS = P1^1;
+  10          sbit OLED_RES = P1^2;
+  11            
+  12          //0 为命令 1为数据
+  13          void OLED_WriteByte(unsigned char Data,unsigned char Cmd)
+  14          {
+  15   1        OLED_DC = Cmd;
+  16   1        SPI_SendByte(Data);
+  17   1        OLED_DC = 1;
+  18   1      }
+  19          void OLED_WriteCMD(unsigned char CMD)
+  20          {
+  21   1        OLED_WriteByte(CMD,0);
+  22   1      }
+  23          void OLED_WriteData(unsigned char Data)
+  24          {
+  25   1        OLED_WriteByte(Data,1);
+  26   1      }
+  27          
+  28          void OLED_Clear()
+  29          {
+  30   1        unsigned char i,n;
+  31   1        for(i = 0;i < 8;i++)
+  32   1        {
+  33   2          OLED_WriteCMD(0xb0+i);
+  34   2          OLED_WriteCMD(0x02);
+  35   2          OLED_WriteCMD(0x10);
+  36   2          for(n=0;n<128;n++)
+  37   2          OLED_WriteData(0);
+  38   2        }
+  39   1      }
+  40          //开启显示    
+  41          void OLED_Display_ON()
+  42          {
+  43   1        OLED_WriteCMD(0x8D);
+  44   1        OLED_WriteCMD(0x14);
+  45   1        OLED_WriteCMD(0xAF);
+  46   1      } 
+  47          //关闭显示
+  48          void OLED_Display_OFF()
+  49          {
+  50   1        OLED_WriteCMD(0x8D);
+  51   1        OLED_WriteCMD(0x10);
+  52   1        OLED_WriteCMD(0xAE);
+  53   1      }
+  54          //设置光标
+C51 COMPILER V9.60.0.0   SPIOLED                                                           06/26/2022 15:37:16 PAGE 2   
+
+  55          void OLED_Set_Position(unsigned char x,unsigned char y)
+  56          {
+  57   1        OLED_WriteCMD(0xb0+y);
+  58   1        OLED_WriteCMD((((x+2)&0xf0)>>4)|0x10);
+  59   1        OLED_WriteCMD((x+2)&0x0f);
+  60   1      }
+  61          //OLED 初始化
+  62          void OLED_Init()
+  63          {
+  64   1        
+  65   1        SPI_Init();
+  66   1        OLED_CS = 0;
+  67   1        OLED_RES = 1;
+  68   1        Delay(100);
+  69   1        OLED_RES = 0;
+  70   1        Delay(100);
+  71   1        OLED_RES = 1;
+  72   1        
+  73   1        OLED_WriteCMD(0xAE);
+  74   1        OLED_WriteCMD(0x02);
+  75   1        OLED_WriteCMD(0x10);
+  76   1        OLED_WriteCMD(0x40);
+  77   1        OLED_WriteCMD(0x81);
+  78   1        OLED_WriteCMD(0xCF);
+  79   1        OLED_WriteCMD(0xA1);
+  80   1        OLED_WriteCMD(0xC8);
+  81   1        OLED_WriteCMD(0xA6);
+  82   1        OLED_WriteCMD(0xA8);
+  83   1        OLED_WriteCMD(0x3F);
+  84   1        OLED_WriteCMD(0xD3);
+  85   1        OLED_WriteCMD(0x00);
+  86   1        OLED_WriteCMD(0xD5);
+  87   1        OLED_WriteCMD(0x80);
+  88   1        OLED_WriteCMD(0xD9);
+  89   1        OLED_WriteCMD(0xF1);
+  90   1        OLED_WriteCMD(0xDA);
+  91   1        OLED_WriteCMD(0x12);
+  92   1        OLED_WriteCMD(0xDB);
+  93   1        OLED_WriteCMD(0x40);
+  94   1        OLED_WriteCMD(0x20);
+  95   1        OLED_WriteCMD(0x02);
+  96   1        OLED_WriteCMD(0x8D);
+  97   1        OLED_WriteCMD(0x14);
+  98   1        OLED_WriteCMD(0xA4);
+  99   1        OLED_WriteCMD(0xA6);
+ 100   1        OLED_WriteCMD(0xAF);
+ 101   1        
+ 102   1        OLED_WriteCMD(0xAF);
+ 103   1        
+ 104   1        OLED_Clear();
+ 105   1        
+ 106   1        OLED_Set_Position(0,0);
+ 107   1      }
+ 108          
+ 109          void OLED_ShowChineseWord(unsigned char x,unsigned char y,unsigned char* Str,unsigned char Flag)
+ 110          {
+ 111   1        unsigned char i = 0;
+ 112   1        unsigned int Index;
+ 113   1        for(Index = 0;Index < sizeof(Hzk)/35;Index ++)
+ 114   1        {
+ 115   2          if(Hzk[Index].Name[0] == Str[0]&&Hzk[Index].Name[1] == Str[1])
+ 116   2          {
+C51 COMPILER V9.60.0.0   SPIOLED                                                           06/26/2022 15:37:16 PAGE 3   
+
+ 117   3            OLED_Set_Position(x,y);//设置OLED光标位置
+ 118   3            for(i= 0;i < 16;i ++)
+ 119   3            {
+ 120   4              if(Flag ==0) OLED_WriteData(Hzk[Index].Dat[i]);
+ 121   4              else OLED_WriteData(~Hzk[Index].Dat[i]);
+ 122   4            }
+ 123   3            OLED_Set_Position(x,y+1);
+ 124   3            for(i = 0;i< 16;i++)
+ 125   3            {
+ 126   4              if(Flag ==0) OLED_WriteData(Hzk[Index].Dat[i+16]);
+ 127   4              else OLED_WriteData(~Hzk[Index].Dat[i+16]);
+ 128   4            }
+ 129   3          }
+ 130   2        }
+ 131   1        
+ 132   1      }
+ 133          
+ 134          void OLED_ShowChar(unsigned char x,unsigned char y,unsigned char Chr,unsigned char Flag)
+ 135          {
+ 136   1        unsigned char c = 0,i=0;
+ 137   1        c = Chr-' ';//得到偏移后的值
+ 138   1        if(x > 127){x = 0;y=y+2;}
+ 139   1        OLED_Set_Position(x,y);
+ 140   1        for(i = 0;i< 8;i++)
+ 141   1        {
+ 142   2          if(Flag ==0) OLED_WriteData(F8X16[c*16+i]);
+ 143   2          else OLED_WriteData(~F8X16[c*16+i]);
+ 144   2        }
+ 145   1        OLED_Set_Position(x,y+1);
+ 146   1        for(i = 0;i< 8;i++)
+ 147   1        {
+ 148   2          if(Flag ==0) OLED_WriteData(F8X16[c*16+i+8]);
+ 149   2          else OLED_WriteData(~F8X16[c*16+i+8]);
+ 150   2        }
+ 151   1      }
+ 152          
+ 153          void OLED_ShowText(unsigned char x,unsigned char y,unsigned char * Str,unsigned char Flag)
+ 154          {
+ 155   1        unsigned char TempStr[3] = {'\0'};
+ 156   1        while(*Str !='\0')
+ 157   1        {
+ 158   2          if(*Str&0x80)
+ 159   2          {
+ 160   3            TempStr[0]= *Str++;
+ 161   3            TempStr[1]= *Str++;
+ 162   3            OLED_ShowChineseWord(x,y,TempStr,Flag);
+ 163   3            x+=16;
+ 164   3            if(*Str &0x80)
+ 165   3            {
+ 166   4              if(x >= 112){y++;y++;x=0;}
+ 167   4            }
+ 168   3            else
+ 169   3            {
+ 170   4              if(x>=120){y++;y++;x=0;}
+ 171   4            }
+ 172   3          }
+ 173   2          else
+ 174   2          {
+ 175   3            OLED_ShowChar(x,y,*Str++,Flag);
+ 176   3            x+=8;
+ 177   3            if(*Str&0x80)
+ 178   3            {
+C51 COMPILER V9.60.0.0   SPIOLED                                                           06/26/2022 15:37:16 PAGE 4   
+
+ 179   4              if(x >= 112){y++;y++;x=0;}
+ 180   4            }
+ 181   3            else
+ 182   3            {
+ 183   4              if(x>=120){y++;y++;x=0;}
+ 184   4            }
+ 185   3          }
+ 186   2        }
+ 187   1      }
+ 188          
+ 189          signed int OLED_Printf(unsigned char x,unsigned char y,const char *pFormat,...)
+ 190            
+ 191          {
+ 192   1        char pStr[25] = {'\0'};
+ 193   1        va_list ap;
+ 194   1        signed int result;
+ 195   1        
+ 196   1        //Forward call tp vprintf
+ 197   1        va_start(ap,pFormat);
+ 198   1        result = vsprintf((char *)pStr,pFormat,ap);
+ 199   1        va_end(ap);
+ 200   1        
+ 201   1        OLED_ShowText(x,y,(const unsigned char *)pStr,0);
+ 202   1        
+ 203   1        return result;
+ 204   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1175    ----
+   CONSTANT SIZE    =   2143    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      77
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
