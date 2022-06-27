@@ -16,9 +16,5 @@ void main()
 			LED = ~LED;
 			OLED_Printf(1, 1, "%bd", Key);
 		}
-		LED = 1;
-		Delay(1000);
-		LED = 0;
-		Delay(1000);
 	}
 }
