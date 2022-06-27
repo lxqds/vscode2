@@ -5,16 +5,16 @@
 #include ".\Hardware\Timer1.h"
 void main()
 {
-unsigned char Key=0;
+	unsigned char Key = 0;
 	OLED_Init();
 	Timer1Init();
 	while (1)
 	{
-		Key=MatrixKey();
-		if(Key)
+		Key = MatrixKey();
+		if (Key)
 		{
 			LED = ~LED;
-			OLED_Printf(1, 1, "%bd",Key);
+			OLED_Printf(1, 1, "%bd", Key);
 		}
 		LED = 1;
 		Delay(1000);

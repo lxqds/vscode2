@@ -1,0 +1,125 @@
+{
+  "name": "电子万年历",
+  "type": "C51",
+  "mode": "Target 1",
+  "toolchain": "Keil_C51",
+  "uploader": "stcgal",
+  "dependenceList": [
+    {
+      "groupName": "custom",
+      "depList": [
+        {
+          "name": "default",
+          "sourceDirList": [],
+          "libList": [],
+          "incList": [
+            "./../../../../KeilMDKArm/C51/INC/STC"
+          ],
+          "defineList": []
+        }
+      ]
+    }
+  ],
+  "compileConfig": {
+    "options": "null"
+  },
+  "srcDirs": [],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "Hardware",
+        "files": [
+          {
+            "path": "Hardware/Delay.c"
+          },
+          {
+            "path": "Hardware/Delay.h"
+          },
+          {
+            "path": "Hardware/MatrixKey.c"
+          },
+          {
+            "path": "Hardware/MatrixKey.h"
+          },
+          {
+            "path": "Hardware/SPI.c"
+          },
+          {
+            "path": "Hardware/SPI.h"
+          },
+          {
+            "path": "Hardware/SPIOled.c"
+          },
+          {
+            "path": "Hardware/SPIOled.h"
+          },
+          {
+            "path": "Hardware/OLEDWord.h"
+          },
+          {
+            "path": "Hardware/Timer1.c"
+          },
+          {
+            "path": "Hardware/Timer1.h"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Source Group 1",
+        "files": [
+          {
+            "path": "main.c"
+          },
+          {
+            "path": "main.h"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "excludeList": [],
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "uploadConfig": {
+    "bin": "",
+    "eepromImgPath": "null",
+    "extraOptions": "",
+    "options": ".eide/stc.flash.json"
+  },
+  "uploadConfigMap": {},
+  "miscInfo": {
+    "uid": "b18bca0d41e9239c06ab25456d78347f"
+  },
+  "targets": {
+    "Target 1": {
+      "compileConfig": {
+        "options": "null"
+      },
+      "uploader": "stcgal",
+      "uploadConfig": {
+        "bin": "",
+        "eepromImgPath": "null",
+        "extraOptions": "",
+        "options": ".eide/stc.flash.json"
+      },
+      "uploadConfigMap": {},
+      "toolchain": "Keil_C51",
+      "custom_dep": {
+        "name": "default",
+        "sourceDirList": [],
+        "libList": [],
+        "incList": [
+          "../../../../KeilMDKArm/C51/INC/STC"
+        ],
+        "defineList": []
+      },
+      "excludeList": []
+    }
+  },
+  "version": "3.1"
+}
