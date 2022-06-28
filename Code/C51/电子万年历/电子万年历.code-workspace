@@ -1,1 +1,22 @@
-{"folders":[{"path":"."}],"settings":{},"extensions":{},"launch":{"configurations":[],"compounds":[]},"tasks":{"version":"2.0.0","tasks":[]}}
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.H": "a51",
+            "timer1.h": "c"
+        }
+    },
+    "extensions": {},
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": []
+    }
+}

@@ -3,7 +3,8 @@
 ".\Objects\MatrixKey.obj",
 ".\Objects\SPI.obj",
 ".\Objects\SPIOled.obj",
-".\Objects\Timer1.obj" 
+".\Objects\Timer1.obj",
+".\Objects\DS1302.obj" 
 TO ".\Objects\电子万年历" 
 
 PRINT(".\Listings\电子万年历.map") REMOVEUNUSED 

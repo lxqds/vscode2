@@ -1,4 +1,4 @@
-#include <STC15F2K60S2.H>
+#include ".\Library\STC15F.H"
 
 sbit DS1302_SCLK = P2^4;
 sbit DS1302_IO = P2^3;
