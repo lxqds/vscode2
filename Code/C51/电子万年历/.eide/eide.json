@@ -29,6 +29,18 @@
     "files": [],
     "folders": [
       {
+        "name": "Source Group 1",
+        "files": [
+          {
+            "path": "main.c"
+          },
+          {
+            "path": "main.h"
+          }
+        ],
+        "folders": []
+      },
+      {
         "name": "Hardware",
         "files": [
           {
@@ -63,18 +75,6 @@
           },
           {
             "path": "Hardware/Timer1.h"
-          }
-        ],
-        "folders": []
-      },
-      {
-        "name": "Source Group 1",
-        "files": [
-          {
-            "path": "main.c"
-          },
-          {
-            "path": "main.h"
           }
         ],
         "folders": []
